@@ -18,11 +18,12 @@ def get_topptips():
 
     soup = BeautifulSoup(response.text, 'html.parser')
     matcher = []
-
-    for match_div in soup.select('.game__team-names'):
-        match_text = match_div.get_text(separator=' ', strip=True)
-        if match_text:
-            matcher.append(match_text)
+for match in soup.select('.game__teams'):
+    team_names = match.select('.game__team-name')
+    if len(team_names) == 2:
+        home = team_names[0].get_text(strip=True)
+        away = team_names[1].get_text(strip=True)
+        matcher.append(f"{home} - {away}")
 
     return jsonify({
         "datum": datetime.now().strftime("%Y-%m-%d"),
