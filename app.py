@@ -19,12 +19,12 @@ def get_topptips():
     soup = BeautifulSoup(response.text, 'html.parser')
     matcher = []
 
-    for match in soup.select('.game__teams'):
-        team_names = match.select('.game__team-name')
-        if len(team_names) == 2:
-            home = team_names[0].get_text(strip=True)
-            away = team_names[1].get_text(strip=True)
-            matcher.append(f"{home} - {away}")
+    for row in soup.select('table tr'):
+        cols = row.find_all('td')
+        if len(cols) >= 2:
+            lagtext = cols[1].get_text(strip=True)
+            if ' - ' in lagtext:
+                matcher.append(lagtext)
 
     return jsonify({
         "datum": datetime.now().strftime("%Y-%m-%d"),
@@ -35,5 +35,3 @@ if __name__ == '__main__':
     import os
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
-
-
