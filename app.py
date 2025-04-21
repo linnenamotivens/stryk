@@ -29,6 +29,7 @@ def get_topptips():
     return jsonify({
         "datum": datetime.now().strftime("%Y-%m-%d"),
         "matcher": matcher
+    })
 
 if __name__ == '__main__':
     import os
